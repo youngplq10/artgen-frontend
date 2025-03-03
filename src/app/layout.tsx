@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.scss";
 import { ThemeProvider } from "@mui/material";
-import { theme } from "./scripts/theme";
+import { lightTheme } from "./scripts/theme";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +21,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={lightTheme}>
           {children}
         </ThemeProvider>
       </body>

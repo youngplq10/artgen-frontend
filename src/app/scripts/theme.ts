@@ -2,23 +2,23 @@
 
 import { createTheme } from "@mui/material";
 
-export const theme = createTheme ({
+export const lightTheme = createTheme ({
   palette: {
     primary: {
-      main: '#456bcb',
+      main: '#5374b2',
     },
     secondary: {
-      main: '##8aa7ef',
+      main: '#d099d1',
     },
     background: {
-      paper: '#f7f8fb',
+      paper: '#f5f6fa',
     },
     text: {
-      primary: '#0c0d11',
-      secondary: '#0c0d11',
+      primary: '#07090e',
+      secondary: '#07090e',
     },
     info: {
-      main: '##3c73fb',
+      main: '#c680a7',
     },
     error: {
         main: '#C60031'
@@ -82,8 +82,8 @@ export const theme = createTheme ({
         {
           props: { variant: 'contained' },
           style: {
-            color: '#f7f8fb',
-            backgroundColor: '##456bcb',
+            color: '#f5f6fa',
+            backgroundColor: '#5374b2',
             borderRadius: '10px',
             padding: '5px 20px 5px 20px',
           },
@@ -101,10 +101,10 @@ export const theme = createTheme ({
 
       styleOverrides: {
         contained: {
-            color: '#fff',
+            color: '#f5f6fa',
         },
         outlined: {
-            color: '#000'
+            color: '#07090e'
         },
         sizeSmall: {
           fontSize: '0.55rem',
