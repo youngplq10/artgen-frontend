@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from 'react'
 import { category } from '../scripts/interfaces'
-import { getAllCategories } from '../scripts/apicalls';
+import { createImage, getAllCategories } from '../scripts/apicalls';
 import { Alert, Box, Button } from '@mui/material';
 import Loading from '../components/Loading';
+import { validatePrompt } from '../scripts/validation';
 
 const CreateArtSection = () => {
     const [categories, setCategories] = useState<category[]>([]);
@@ -33,7 +34,16 @@ const CreateArtSection = () => {
     }, [])
 
     const handleCreateArt = async () => {
-        //Handle creating art
+        const validate = validatePrompt(prompt);
+
+        if (validate !== "Success") {
+            setErrorMessage(validate);
+            setErrorState(false);
+        } else {
+            setErrorState(true);
+            const res = await createImage(prompt, selectedCategory);
+            window.location.href = "/dashboard/art/" + res;
+        }
     }
 
     return (

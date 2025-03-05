@@ -1,10 +1,13 @@
 "use server"
 
 import axios from "axios";
-import { setAuthToken } from "./server";
+import { getAllCookies, setAuthToken } from "./server";
 import { category } from "./interfaces";
+import OpenAI from "openai";
 
 const API = process.env.NEXT_PRIVATE_API;
+const OPENAI_KEY = process.env.NEXT_PRIVATE_OPENAI_KEY;
+const openai = new OpenAI({ apiKey: OPENAI_KEY});
 
 export const createUser = async (username: string, email: string, password: string) : Promise<string> => {
     try {
@@ -86,5 +89,42 @@ export const getAllCategories = async () : Promise<category[] | string> => {
         } 
     } catch {
         return "Server error. Please refresh page."
+    }
+}
+
+export const createImage = async (prompt: string, category: string) => {
+    try {
+        const { username, jwt } = await getAllCookies();
+
+        const completion = await openai.images.generate({
+            model: "dall-e-3",
+            prompt: prompt + "Create the image in style of " + category,
+            n: 1,
+            size: '1024x1024',
+        });
+
+        const formData = new FormData();
+        if (typeof username?.value === "string") {
+            formData.append("username", username?.value);
+        }
+        if (typeof completion.data[0].url === "string") {
+            formData.append("link", completion.data[0].url)
+        }
+        formData.append("prompt", prompt);
+        formData.append("cost", "5");
+
+        const res = await axios.post(API + "/auth/art", formData, {
+            headers: {
+                'Authorization': 'Bearer ' + jwt?.value,
+            }
+        });
+
+        if (res.status === 201) {
+            return res.data;
+        } else {
+            return "Server error. Please try again.";
+        }
+    } catch {
+        return "Server error. Please try again.";
     }
 }
