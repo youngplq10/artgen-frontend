@@ -9,7 +9,7 @@ const Dashboard = () => {
         <div className='container-lg my-5'>
             <div className="row">
                 <div className="col-auto">
-                    <Button variant='contained'>Create art</Button>
+                    <Button variant='contained' href='/dashboard/create-art'>Create art</Button>
                 </div>
             </div>
             <div className="row">

@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { setAuthToken } from "./server";
+import { category } from "./interfaces";
 
 const API = process.env.NEXT_PRIVATE_API;
 
@@ -67,5 +68,23 @@ export const loginUser = async (username: string, password: string) : Promise<st
         } else {
             return "Server error. Please try again.";
         }
+    }
+}
+
+export const getAllCategories = async () : Promise<category[] | string> => {
+    try {
+        const res = await axios.get(API + "/public/categories", {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (res.status === 200) {
+            return res.data as category[];
+        } else {
+            return "Server error. Please refresh page."
+        } 
+    } catch {
+        return "Server error. Please refresh page."
     }
 }

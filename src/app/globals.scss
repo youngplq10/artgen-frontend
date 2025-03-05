@@ -1,1 +1,14 @@
 @import "./node_modules/bootstrap/scss/bootstrap.scss";
+
+.gradient {
+    animation-duration: 1.8s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #ececec;
+    background: linear-gradient(to right, #f0f0f0 8%, #dcdcdc 38%, #f0f0f0 54%);
+    background-size: 1000px 640px;
+    
+    position: relative;
+  }
