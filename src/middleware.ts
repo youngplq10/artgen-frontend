@@ -7,14 +7,14 @@ export function middleware(req: NextRequest) {
     
     //Not authenticated users trying to access only-authed content
     if (isAuth !== "true" && req.nextUrl.pathname.startsWith("/dashboard")){
-        return NextResponse.redirect(new URL("/log-in", req.url));
+        return NextResponse.redirect(new URL("/sign-in", req.url));
     } 
     if (isAuth !== "true" && req.nextUrl.pathname.match("/log-out")){
-        return NextResponse.redirect(new URL("/log-in", req.url));
+        return NextResponse.redirect(new URL("/sign-in", req.url));
     }
 
     //Authenticated users trying to access only-unauthed content
-    if (isAuth === "true" && req.nextUrl.pathname.match("/log-in")){
+    if (isAuth === "true" && req.nextUrl.pathname.match("/sign-in")){
         return NextResponse.redirect(new URL("/dashboard", req.url));
     }
     if (isAuth === "true" && req.nextUrl.pathname.match("/create-account")){

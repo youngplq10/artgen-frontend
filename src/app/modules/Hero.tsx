@@ -22,7 +22,7 @@ const Hero = () => {
                 <div className="col-auto">
                     <Stack direction="row" spacing={2}>
                         <Button variant='contained' href='/create-account'>Create account</Button>
-                        <Button variant='outlined' href='/log-in'>Log in</Button>
+                        <Button variant='outlined' href='/sign-in'>Log in</Button>
                     </Stack>
                 </div>
             </div>

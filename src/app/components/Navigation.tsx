@@ -5,7 +5,7 @@ import React from 'react'
 const Navigation = () => {
     return (
         <Stack direction="row" spacing={2}>
-            <Link href='/log-in' className='text-decoration-none'><Typography variant='h4' color='textPrimary'>Sign in</Typography></Link>
+            <Link href='/sign-in' className='text-decoration-none'><Typography variant='h4' color='textPrimary'>Sign in</Typography></Link>
         </Stack>
     )
 }
