@@ -3,6 +3,7 @@
 import { Alert, Button } from '@mui/material'
 import React, { useState } from 'react'
 import { validateNewUser } from '../scripts/validation';
+import { createUser } from '../scripts/apicalls';
 
 const CreateAccountForm = () => {
     const [username, setUsername] = useState("");
@@ -13,12 +14,18 @@ const CreateAccountForm = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const [errorState, setErrorState] = useState(true);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const res = validateNewUser(username, email, password, repassword);
 
         if (res === "Success") {
-            setErrorState(true);
-            //process creating user
+            const res = await createUser(username, email, password);
+
+            if (res !== "User created.") {
+                setErrorMessage(res);
+                setErrorState(false);
+            } else {
+                window.location.href = "/dashboard";
+            }
         } else {
             setErrorMessage(res);
             setErrorState(false);
