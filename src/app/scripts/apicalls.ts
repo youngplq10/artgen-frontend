@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { getAllCookies, setAuthToken } from "./server";
-import { category, creatingImage } from "./interfaces";
+import { art, category, creatingImage } from "./interfaces";
 import OpenAI from "openai";
 import { Storage } from "@google-cloud/storage";
 import path from "path";
@@ -197,4 +197,25 @@ export const getUserData = async () : Promise<user | string> => {
     } catch {
       return "Server error. Please refresh page.";
     }
+}
+
+export const getArtData = async (linkTo: string) : Promise<art | string> => {
+  try {
+    const { jwt } = await getAllCookies();
+
+    const res = await axios.get(API + "/auth/art/" + linkTo, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + jwt?.value,
+      }
+    });
+
+    if (res.status === 200) {
+      return res.data as art;
+    } else {
+      return res.data.message;
+    }
+  } catch {
+    return "Server error. Please refresh page.";
+  }
 }

@@ -15,7 +15,7 @@ const ArtCard = ( { artData } : { artData: art } ) => {
                 />
                 <CardContent>
                     <Typography variant='body1'>
-                        { artData.prompt }
+                        { artData.prompt + ". Cost: " + artData.cost }
                     </Typography>
                 </CardContent>
             </Card>

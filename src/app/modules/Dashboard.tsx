@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Button } from '@mui/material'
+import { Alert, Box, Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import ArtCard from '../components/ArtCard'
 import { user } from '../scripts/interfaces'
@@ -56,6 +56,12 @@ const Dashboard = () => {
                         }) }
                     </>
                 ) }
+            </div>
+
+            <div className="row my-2">
+                <Alert severity='error' hidden={errorState}>
+                    { errorMessage }
+                </Alert>
             </div>
         </div>
     )
