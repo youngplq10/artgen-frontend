@@ -182,7 +182,7 @@ export const getUserData = async () : Promise<user | string> => {
     try {
       const { username, jwt } = await getAllCookies();
 
-      const res = await axios.get(API + "/user/" + username?.value, {
+      const res = await axios.get(API + "/auth/user/" + username?.value, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + jwt?.value,
@@ -192,7 +192,7 @@ export const getUserData = async () : Promise<user | string> => {
       if (res.status === 200) {
         return res.data as user
       } else {
-        return "Server error. Please refresh page.";
+        return res.data.message;
       }
     } catch {
       return "Server error. Please refresh page.";

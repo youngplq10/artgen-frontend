@@ -2,20 +2,24 @@
 
 import { Card, CardContent, CardMedia, Typography } from '@mui/material'
 import React from 'react'
+import { art } from '../scripts/interfaces'
+import Link from 'next/link'
 
-const ArtCard = () => {
+const ArtCard = ( { artData } : { artData: art } ) => {
     return (
-        <Card>
-            <CardMedia
-                sx={{ height: 240 }}
-                image='https://images.unsplash.com/photo-1741087562365-d0bf6e6fd7ef?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-            />
-            <CardContent>
-                <Typography variant='body1'>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </Typography>
-            </CardContent>
-        </Card>
+        <Link href={"/dashboard/art/" + artData.linkTo} className='text-decoration-none'>
+            <Card sx={{ maxHeight: 350 + "px", height: 350 + "px" }}>
+                <CardMedia
+                    sx={{ height: 250 }}
+                    image={ artData.link }
+                />
+                <CardContent>
+                    <Typography variant='body1'>
+                        { artData.prompt }
+                    </Typography>
+                </CardContent>
+            </Card>
+        </Link>
     )
 }
 
