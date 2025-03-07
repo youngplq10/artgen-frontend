@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { category } from '../scripts/interfaces'
 import { createImage, getAllCategories } from '../scripts/apicalls';
-import { Alert, Box, Button } from '@mui/material';
+import { Alert, Box, Button, Typography } from '@mui/material';
 import Loading from '../components/Loading';
 import { validatePrompt } from '../scripts/validation';
 
@@ -18,6 +18,7 @@ const CreateArtSection = () => {
     const [createLoading, setCreateLoading] = useState(false);
 
     const [prompt, setPrompt] = useState("");
+    const [cost, setCost] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState("Pixel Art");
 
     useEffect(() => {
@@ -44,7 +45,7 @@ const CreateArtSection = () => {
         } else {
             setErrorState(true);
             setCreateLoading(true);
-            const res = await createImage(prompt, selectedCategory);
+            const res = await createImage(prompt, selectedCategory, cost);
 
             if (res !== undefined && res.created === true) {
                 setCreateLoading(false);
@@ -61,13 +62,18 @@ const CreateArtSection = () => {
         }
     }
 
+    const handleCountCostOfPrompt = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPrompt(e.target.value);
+        setCost(Math.ceil(e.target.value.length / 10));
+    }
+
     return (
         <div className='container-lg my-5'>
             <div className="row">
                 <div className="col-12 col-md-8 col-lg-6">
                     <form>
                         <label htmlFor='prompt' className='my-2'>Prompt</label>
-                        <input type='text' id='prompt' className='form-control' value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+                        <input type='text' id='prompt' className='form-control' value={prompt} onChange={(e) => handleCountCostOfPrompt(e)} />
 
                         <label htmlFor='category' className='my-2'>Category</label>
                         { loading ? (
@@ -89,6 +95,8 @@ const CreateArtSection = () => {
                         ) : (
                             <Button variant='contained' className='my-2' onClick={handleCreateArt}>Create art</Button>
                         ) }
+
+                        <Typography variant='h5'>Cost: {cost}</Typography>
                     </form>
                 </div>
             </div>

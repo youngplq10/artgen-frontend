@@ -102,7 +102,7 @@ export const getAllCategories = async () : Promise<category[] | string> => {
     }
 }
 
-export const createImage = async (prompt: string, category: string): Promise<creatingImage | undefined> => {
+export const createImage = async (prompt: string, category: string, cost: number): Promise<creatingImage | undefined> => {
     try {
         const { username, jwt } = await getAllCookies();
 
@@ -151,7 +151,7 @@ export const createImage = async (prompt: string, category: string): Promise<cre
                   }
                   formData.append("link", signedUrl);
                   formData.append("prompt", prompt);
-                  formData.append("cost", "5");
+                  formData.append("cost", cost.toString());
 
                   const res = await axios.post(API + "/auth/art", formData, {
                       headers: {
