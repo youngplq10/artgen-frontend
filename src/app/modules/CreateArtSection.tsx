@@ -15,6 +15,8 @@ const CreateArtSection = () => {
 
     const [loading, setLoading] = useState(true);
 
+    const [createLoading, setCreateLoading] = useState(false);
+
     const [prompt, setPrompt] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Pixel Art");
 
@@ -41,8 +43,21 @@ const CreateArtSection = () => {
             setErrorState(false);
         } else {
             setErrorState(true);
+            setCreateLoading(true);
             const res = await createImage(prompt, selectedCategory);
-            window.location.href = "/dashboard/art/" + res;
+
+            if (res !== undefined && res.created === true) {
+                setCreateLoading(false);
+                window.location.href = "/dashboard/art/" + res.data;
+            } else if (res!== undefined && res.created === false) {
+                setCreateLoading(false);
+                setErrorMessage(res.data)
+                setErrorState(false);
+            } else {
+                setCreateLoading(false);
+                setErrorMessage("Server error. Please try again.")
+                setErrorState(false);
+            }
         }
     }
 
@@ -69,7 +84,11 @@ const CreateArtSection = () => {
                             </select>
                         ) }
 
-                        <Button variant='contained' className='my-2' onClick={handleCreateArt}>Create art</Button>
+                        { createLoading ? (
+                            <Button variant='contained' className='my-2' disabled onClick={handleCreateArt}>Creating...</Button>
+                        ) : (
+                            <Button variant='contained' className='my-2' onClick={handleCreateArt}>Create art</Button>
+                        ) }
                     </form>
                 </div>
             </div>

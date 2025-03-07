@@ -41,12 +41,11 @@ const existingUserSchema = Joi.object({
 })
 
 const promptSchema = Joi.object({
-    prompt: Joi.string().alphanum().min(5).max(200).required().messages({
+    prompt: Joi.string().min(5).max(200).required().messages({
         "string.empty": "Prompt can't be empty.",
         "string.min": "Prompt's length can't be shorter than 5 characters.",
         "string.max": "Prompt's length can't be longer than 200 characters.",
         "any.required": "Prompt field is required to process.",
-        "string.alphanum": "Prompt doesn't only contain alphanumeric characters."
     })
 })
 
@@ -73,5 +72,9 @@ export const validateExistingUser = (getUsername: string, getPassword: string) :
 export const validatePrompt = (prompt: string) : string => {
     const result = promptSchema.validate({ prompt: prompt });
 
+    if (result.error != null) {
+        return result.error.message;
+    }
+    
     return "Success";
 }

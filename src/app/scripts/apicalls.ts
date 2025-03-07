@@ -2,12 +2,11 @@
 
 import axios from "axios";
 import { getAllCookies, setAuthToken } from "./server";
-import { category } from "./interfaces";
+import { category, creatingImage } from "./interfaces";
 import OpenAI from "openai";
 import { Storage } from "@google-cloud/storage";
 import path from "path";
-import fs from "fs";
-import { promisify } from "util";
+import { user } from '../scripts/interfaces'
 
 const API = process.env.NEXT_PRIVATE_API;
 const OPENAI_KEY = process.env.NEXT_PRIVATE_OPENAI_KEY;
@@ -103,79 +102,99 @@ export const getAllCategories = async () : Promise<category[] | string> => {
     }
 }
 
-export const createImage = async (prompt: string, category: string) : Promise<string> => {
+export const createImage = async (prompt: string, category: string): Promise<creatingImage | undefined> => {
     try {
-      const { username, jwt } = await getAllCookies();
-  
-      const completion = await openai.images.generate({
-        model: "dall-e-3",
-        prompt: prompt + " Create the image in style of " + category,
-        n: 1,
-        size: "1024x1024",
-      });
-  
-      if (!completion.data[0]?.url) {
-        return "Failed to generate image.";
-      }
-  
-      const imageUrl = completion.data[0].url;
-  
-      const response = await axios({
+        const { username, jwt } = await getAllCookies();
+
+        const completion = await openai.images.generate({
+            model: "dall-e-3",
+            prompt: prompt + " Create the image in style of " + category,
+            n: 1,
+            size: "1024x1024",
+        }); 
+
+      
+        if (!completion.data[0]?.url) {
+            return { created: false, data: "Failed to generate image." };
+        }
+      
+        const imageUrl = completion.data[0].url; 
+
+        const response = await axios({
             url: imageUrl,
             method: "GET",
             responseType: "stream",
-      });
-  
-      const gcsFileName = `generated_images/${Date.now()}-${category}.png`;
-      const gcsFile = bucket.file(gcsFileName);
-  
-      const fileStream = gcsFile.createWriteStream({
-        metadata: {
-          contentType: "image/png",
-        },
-      });
-  
-      response.data.pipe(fileStream);
-  
-      return new Promise(() => {
-        fileStream.on("finish", async () => {
-          try {
+        });
 
-            const [signedUrl] = await gcsFile.getSignedUrl({
-              action: "read",
-              expires: Date.now() + 365 * 24 * 60 * 60 * 1000,
-            });
-  
-            const formData = new FormData();
-            if (typeof username?.value === "string") {
-              formData.append("username", username.value);
-            }
-            formData.append("link", signedUrl);
-            formData.append("prompt", prompt);
-            formData.append("cost", "5");
-  
-            const res = await axios.post(API + "/auth/art", formData, {
-              headers: {
-                Authorization: "Bearer " + jwt?.value,
-              },
-            });
-  
-            if (res.status === 201) {
-              return res.data;
-            } else {
-              return "Server error. Please try again.";
-            }
-          } catch {
-            return "Server error. Please try again."
-          }
+        const gcsFileName = `generated_images/${Date.now()}-${category}.png`;
+        const gcsFile = bucket.file(gcsFileName);
+
+        const fileStream = gcsFile.createWriteStream({
+            metadata: {
+              contentType: "image/png",
+            },
         });
-  
-        fileStream.on("error", (err) => {
-          return "Error uploading image to Google Cloud: " + err;
+
+        response.data.pipe(fileStream);
+
+        return new Promise<creatingImage>((resolve, reject) => {
+            fileStream.on("finish", async () => {
+              try {
+                  const [signedUrl] = await gcsFile.getSignedUrl({
+                      action: "read",
+                      expires: Date.now() + 365 * 24 * 60 * 60 * 1000,
+                  });
+
+                  const formData = new FormData();
+                  if (typeof username?.value === "string") {
+                      formData.append("username", username.value);
+                  }
+                  formData.append("link", signedUrl);
+                  formData.append("prompt", prompt);
+                  formData.append("cost", "5");
+
+                  const res = await axios.post(API + "/auth/art", formData, {
+                      headers: {
+                        Authorization: "Bearer " + jwt?.value,
+                      },
+                  });
+
+                  if (res.status === 201) {
+                      resolve({ created: true, data: res.data })
+                  } else {
+                      reject({ created: false, data: "Failed to generate image." });
+                  }
+              } catch (err) {
+                  reject({ created: false, data: "Failed to generate image." });
+              }
+          });
+
+          fileStream.on("error", () => {
+              reject({ created: false, data: "Failed to generate image." });
+          });
         });
-      });
-    } catch (error) {
-      console.error("Error creating image:", error);
-      return "Server error. Please try again.";
+    } catch {
+        console.error("Server error in creating image.")
     }
-  };
+};
+
+export const getUserData = async () : Promise<user | string> => {
+    try {
+      const { username, jwt } = await getAllCookies();
+
+      const res = await axios.get(API + "/user/" + username?.value, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + jwt?.value,
+        }
+      });
+
+      if (res.status === 200) {
+        return res.data as user
+      } else {
+        return "Server error. Please refresh page.";
+      }
+    } catch {
+      return "Server error. Please refresh page.";
+    }
+}
