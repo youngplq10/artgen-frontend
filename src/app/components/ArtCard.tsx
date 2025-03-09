@@ -15,8 +15,13 @@ const ArtCard = ( { artData } : { artData: art } ) => {
                 />
                 <CardContent>
                     <Typography variant='body1'>
-                        { artData.prompt + ". Cost: " + artData.cost }
+                        { artData.prompt.length <= 50 ? (
+                            <>{ artData.prompt }</>
+                        ) : (
+                            <>{ artData.prompt.slice(0, 47) + "..." }</>
+                        ) }
                     </Typography>
+                    <Typography variant='body1'>Cost : { artData.cost }</Typography>
                 </CardContent>
             </Card>
         </Link>

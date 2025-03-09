@@ -20,4 +20,7 @@ export function middleware(req: NextRequest) {
     if (isAuth === "true" && req.nextUrl.pathname.match("/create-account")){
         return NextResponse.redirect(new URL("/dashboard", req.url));
     }
+    if (isAuth === "true" && req.nextUrl.pathname === "/"){
+        return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
 }

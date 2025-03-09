@@ -57,8 +57,8 @@ const ArtBoard = () => {
                         </div>
 
                         <div className="col-12 col-md-4 col-lg-6 my-2">
-                        <Typography variant='h4' className='my-2'>{ art?.prompt }</Typography>
-                        <Typography variant='h4' className='my-2'>{ "Cost: " + art?.cost + " credits" }</Typography>
+                        <Typography variant='h3' className='my-2'>{ art?.prompt }</Typography>
+                        <Typography variant='h5' className='my-2'>{ "Cost: " + art?.cost + " credits" }</Typography>
                         <Button href={art?.link} className='my-2' variant='contained'>Download</Button>
                         </div>
                     </>

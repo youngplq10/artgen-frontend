@@ -106,6 +106,16 @@ export const createImage = async (prompt: string, category: string, cost: number
     try {
         const { username, jwt } = await getAllCookies();
 
+        const hasCredits = await axios.post(API + "/auth/user/process/" + username?.value + "/" + cost.toString(), {}, {
+            headers: {
+                Authorization: "Bearer " + jwt?.value,
+              },
+        });
+
+        if (hasCredits.status !== 200) {
+            return { created: false, data: hasCredits.data.message };
+        }
+
         const completion = await openai.images.generate({
             model: "dall-e-3",
             prompt: prompt + " Create the image in style of " + category,
@@ -151,7 +161,6 @@ export const createImage = async (prompt: string, category: string, cost: number
                   }
                   formData.append("link", signedUrl);
                   formData.append("prompt", prompt);
-                  formData.append("cost", cost.toString());
 
                   const res = await axios.post(API + "/auth/art", formData, {
                       headers: {
@@ -162,14 +171,17 @@ export const createImage = async (prompt: string, category: string, cost: number
                   if (res.status === 201) {
                       resolve({ created: true, data: res.data })
                   } else {
+                      await axios.post("/auth/user/refund/" + username?.value + "/" + cost.toString(), {}, {});
                       reject({ created: false, data: "Failed to generate image." });
                   }
               } catch (err) {
+                  await axios.post("/auth/user/refund/" + username?.value + "/" + cost.toString(), {}, {});
                   reject({ created: false, data: "Failed to generate image." });
               }
           });
 
-          fileStream.on("error", () => {
+          fileStream.on("error", async () => {
+              await axios.post("/auth/user/refund/" + username?.value + "/" + cost.toString(), {}, {});
               reject({ created: false, data: "Failed to generate image." });
           });
         });
@@ -218,4 +230,20 @@ export const getArtData = async (linkTo: string) : Promise<art | string> => {
   } catch {
     return "Server error. Please refresh page.";
   }
+}
+
+export const removeCredits = async (cost: number) : Promise<void> => {
+    try {
+        const { username, jwt } = await getAllCookies();
+
+        const res = await axios.post(API + "/public/user/remove/" + username?.value + "/" + cost.toString(), {}, {
+            
+        });
+
+        console.log(res);
+
+
+    } catch {
+        console.log("error");
+    }
 }
