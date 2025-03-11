@@ -106,7 +106,7 @@ const CreateArtSection = () => {
                     ) : (
                         <Typography variant='h4' className='my-2'>
                             { credits <= 0 ? (
-                                <>{ "You don't have credits." } <Link href="/credits">Buy some now!</Link></>
+                                <>{ "You don't have credits." } <Link href="dashboard/credits">Buy some now!</Link></>
                             ) : (
                                 <>{ "You have " + userData?.credits + " credits" }</>
                             ) }

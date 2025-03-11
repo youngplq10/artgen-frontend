@@ -161,6 +161,7 @@ export const createImage = async (prompt: string, category: string, cost: number
                   }
                   formData.append("link", signedUrl);
                   formData.append("prompt", prompt);
+                  formData.append("cost", cost.toString())
 
                   const res = await axios.post(API + "/auth/art", formData, {
                       headers: {

@@ -19,7 +19,7 @@ const Navbar = () => {
     }, [])
 
     return (
-        <div className='container-lg'>
+        <div className='container-lg border-bottom'>
             <div className='row my-3'>
                 <div className="col-auto">
                     <Logo />
