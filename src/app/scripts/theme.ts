@@ -23,6 +23,9 @@ export const lightTheme = createTheme ({
     error: {
         main: '#C60031'
     },
+    success: {
+      main: '#5cb85c',
+    }
   },
   typography: {
     fontFamily: 'Roboto',

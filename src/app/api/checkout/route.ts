@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
                 },
             ],
             mode: "payment",
-            success_url: "http://localhost:3000/dashboard/credits/success",
+            success_url: "http://localhost:3000/dashboard/credits/success?session_id={CHECKOUT_SESSION_ID}&amount=" + amount,
             cancel_url: "http://localhost:3000/dashboard/credits/cancel",
         });
 

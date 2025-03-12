@@ -233,18 +233,26 @@ export const getArtData = async (linkTo: string) : Promise<art | string> => {
   }
 }
 
-export const removeCredits = async (cost: number) : Promise<void> => {
+export const addCredits = async (amount: number, session_id: string) : Promise<boolean> => {
     try {
         const { username, jwt } = await getAllCookies();
 
-        const res = await axios.post(API + "/public/user/remove/" + username?.value + "/" + cost.toString(), {}, {
-            
+        const formData = new FormData();
+
+        formData.append("amount", amount.toString());
+        formData.append("session_id", session_id);
+        if (typeof username?.value === "string") {
+            formData.append("username", username?.value);
+        }
+
+        await axios.post(API + "/auth/user/credits/add", formData, {
+            headers: {
+                "Authorization": "Bearer " + jwt?.value,
+            }
         });
 
-        console.log(res);
-
-
+        return true;
     } catch {
-        console.log("error");
+        return false;
     }
 }
