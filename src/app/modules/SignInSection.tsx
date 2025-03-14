@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const SignInSection = () => {
     return (
-        <div className='container-lg'>
+        <div className='container-lg my-3'>
             <div className="row justify-content-center">
                 <div className="col-10 col-md-6">
                     <SignInForm />

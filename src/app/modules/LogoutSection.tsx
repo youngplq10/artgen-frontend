@@ -5,8 +5,8 @@ import React from 'react'
 import { logout } from '../scripts/server'
 
 const LogoutSection = () => {
-    const handleLogout = () => {
-        logout();
+    const handleLogout = async () => {
+        await logout();
         window.location.href = "/";
     }
 
