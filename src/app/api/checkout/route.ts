@@ -23,12 +23,14 @@ export async function POST(request: NextRequest) {
             cancel_url: "http://localhost:3000/dashboard/credits/cancel",
         });
 
+        console.log(session)        
+
         return NextResponse.json({
             url: session.url
         });
-    } catch {
+    } catch (error) {
         return NextResponse.json({
-            error: "Server error",
+            error: error instanceof Error ? error.message : "An unknown error occurred",
             status: 500,
         });
     }

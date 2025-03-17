@@ -61,13 +61,14 @@ const CreditsSection = () => {
 
     const handleRedirectToPayment = async () => {
         const res = await fetch("/api/checkout", { method: "POST", body: JSON.stringify({ amount: amount }) });
-        const { url } = await res.json();
-        if (url) {
-            window.location.href = url;
+        const data = await res.json();
+        if (data.url) {
+            window.location.href = data.url;
         } else {
-            const { error } = await res.json();
-            setErrorMessage(error);
-            setErrorState(false);
+            if (data.error) {
+                setErrorMessage(String(data.error));
+                setErrorState(false);
+            }
         }
     }
 
