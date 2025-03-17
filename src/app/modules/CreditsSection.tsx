@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import { user } from '../scripts/interfaces'
 import { getUserData } from '../scripts/apicalls';
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@mui/material';
-import { loadStripe } from "@stripe/stripe-js";
 
 const CreditsSection = () => {
     //Stripe config
@@ -12,10 +11,7 @@ const CreditsSection = () => {
         throw new Error("PUBLISHABLE_STRIPE_KEY is undefined");
     }
 
-    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_PUBLISHABLE_STRIPE_KEY);
-
     const [userData, setUserData] = useState<user>();
-    const [loading, setLoading] = useState(true);
 
     const [errorMessage, setErrorMessage] = useState("");
     const [errorState, setErrorState] = useState(true);

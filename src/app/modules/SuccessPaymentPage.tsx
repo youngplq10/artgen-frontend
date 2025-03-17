@@ -1,6 +1,6 @@
 "use client"
 
-import { Alert, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { addCredits } from '../scripts/apicalls';

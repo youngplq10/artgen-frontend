@@ -13,7 +13,7 @@ const SignInSection = () => {
             </div>
             <div className="row justify-content-center">
                 <div className="col-10 col-md-6">
-                    <Typography variant='body1'>You don't have an account? <Link href='/create-account'>Create one now!</Link></Typography>
+                    <Typography variant='body1'>You dont have an account? <Link href='/create-account'>Create one now!</Link></Typography>
                 </div>
             </div>
         </div>

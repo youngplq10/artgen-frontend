@@ -175,7 +175,7 @@ export const createImage = async (prompt: string, category: string, cost: number
                       await axios.post("/auth/user/refund/" + username?.value + "/" + cost.toString(), {}, {});
                       reject({ created: false, data: "Failed to generate image." });
                   }
-              } catch (err) {
+              } catch {
                   await axios.post("/auth/user/refund/" + username?.value + "/" + cost.toString(), {}, {});
                   reject({ created: false, data: "Failed to generate image." });
               }

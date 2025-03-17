@@ -1,12 +1,14 @@
 import Navbar from '@/app/modules/Navbar'
 import SuccessPaymentPage from '@/app/modules/SuccessPaymentPage'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
     return (
         <>
             <Navbar />
-            <SuccessPaymentPage />
+            <Suspense fallback={<div>Loading...</div>}>
+                <SuccessPaymentPage />
+            </Suspense>
         </>
     )
 }
