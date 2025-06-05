@@ -123,6 +123,8 @@ export const createImage = async (prompt: string, category: string, cost: number
             size: "1024x1024",
         }); 
 
+        console.log(completion)
+
       
         if (!completion.data[0]?.url) {
             return { created: false, data: "Failed to generate image." };
@@ -135,6 +137,8 @@ export const createImage = async (prompt: string, category: string, cost: number
             method: "GET",
             responseType: "stream",
         });
+
+        console.log(response)
 
         const gcsFileName = `generated_images/${Date.now()}-${category}.png`;
         const gcsFile = bucket.file(gcsFileName);
